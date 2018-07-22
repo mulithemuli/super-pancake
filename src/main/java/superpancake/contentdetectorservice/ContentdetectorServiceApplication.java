@@ -12,8 +12,10 @@ import org.apache.tika.metadata.Metadata;
 import org.apache.tika.mime.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.web.ErrorController;
+import org.springframework.boot.web.servlet.error.ErrorController;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
@@ -25,11 +27,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
-import io.micrometer.spring.autoconfigure.MeterRegistryCustomizer;
 
 @SpringBootApplication
 @Controller
 @Configuration
+@EnableDiscoveryClient
 public class ContentdetectorServiceApplication implements ErrorController {
 
 	private static Log LOGGER = LogFactory.getLog(ContentdetectorServiceApplication.class);
