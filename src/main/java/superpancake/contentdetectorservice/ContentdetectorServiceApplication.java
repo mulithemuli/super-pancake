@@ -3,6 +3,7 @@ package superpancake.contentdetectorservice;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.tika.config.TikaConfig;
@@ -17,11 +18,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.HttpServerErrorException;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -50,9 +53,7 @@ public class ContentdetectorServiceApplication implements ErrorController {
 	public TikaConfig tikaConfig() {
 		try {
 			return new TikaConfig();
-		} catch (IOException exception) {
-			throw new RuntimeException("Tika configuration failed", exception);
-		} catch (TikaException exception) {
+		} catch (IOException | TikaException exception) {
 			throw new RuntimeException("Tika configuration failed", exception);
 		}
 	}
@@ -75,7 +76,7 @@ public class ContentdetectorServiceApplication implements ErrorController {
 			
 			return r;
 		} catch (IOException ioException) {
-			throw new RuntimeException("Tika detection failed", ioException);
+			throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, String.format("Tika detection failed: %s", ExceptionUtils.getRootCauseMessage(ioException)));
 		} finally {
 			volume.increment(payload.length / 1024 / 1024);
 			uploads.record(System.currentTimeMillis() - started, TimeUnit.MILLISECONDS);
