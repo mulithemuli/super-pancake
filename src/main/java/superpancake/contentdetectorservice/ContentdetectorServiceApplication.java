@@ -38,15 +38,6 @@ public class ContentdetectorServiceApplication implements ErrorController {
 		this.tikaConfig = tikaConfig;
 	}
 
-	@Bean
-	public TikaConfig tikaConfig() {
-		try {
-			return new TikaConfig();
-		} catch (IOException | TikaException exception) {
-			throw new RuntimeException("Tika configuration failed", exception);
-		}
-	}
-
 	public static class ContentTypeResponse {
 		public String mediaType;
 	}
