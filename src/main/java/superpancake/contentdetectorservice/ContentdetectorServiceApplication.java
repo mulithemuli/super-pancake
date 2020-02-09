@@ -44,9 +44,9 @@ public class ContentdetectorServiceApplication implements ErrorController {
 
 	public static class Metrics {
 
-		private Long volume;
+		private Long volume = 0L;
 
-		private Long uploads;
+		private Long uploads = 0L;
 
 		public Long getUploads() {
 			return uploads;
