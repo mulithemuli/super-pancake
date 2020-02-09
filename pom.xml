@@ -6,7 +6,7 @@
 	<groupId>super-pancake</groupId>
 	<artifactId>contentdetector-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 
 	<name>contentdetector-service</name>
 	<description>Content Detection as a Service</description>
